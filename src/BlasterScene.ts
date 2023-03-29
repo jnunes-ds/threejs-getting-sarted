@@ -8,9 +8,7 @@ class BlasterScene extends Three.Scene {
   private readonly objLoader = new OBJLoader();
 
   async initialize() {
-    const targetMtl = await this.mtlLoader.loadAsync(
-      "assets/kenney_blaster-kit/OBJ_format/targetA.mtl"
-    );
+    const targetMtl = await this.mtlLoader.loadAsync("assets/targetA.mtl");
     targetMtl.preload();
 
     const target1 = await this.createTarget(targetMtl);
@@ -26,7 +24,7 @@ class BlasterScene extends Three.Scene {
     target3.position.z = -3;
 
     const target4 = await this.createTarget(targetMtl);
-    target4.position.x = 21;
+    target4.position.x = -2;
     target4.position.z = -3;
 
     this.add(target1, target2, target3, target4);
@@ -40,9 +38,7 @@ class BlasterScene extends Three.Scene {
   private async createTarget(mtl: MTLLoader.MaterialCreator) {
     this.objLoader.setMaterials(mtl);
 
-    const modelRoot = await this.objLoader.loadAsync(
-      "assets/kenney_blaster-kit/OBJ_format/targetA.obj"
-    );
+    const modelRoot = await this.objLoader.loadAsync("assets/targetA.obj");
 
     modelRoot.rotateY(Math.PI * 0.5);
 

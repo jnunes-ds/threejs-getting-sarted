@@ -1,6 +1,12 @@
 import * as Three from "three";
 
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
+
 class BlasterScene extends Three.Scene {
+  private readonly mtlLoader = new MTLLoader();
+  private readonly objLoader = new OBJLoader();
+
   initialize() {
     const geometry = new Three.BoxGeometry();
     const material = new Three.MeshPhongMaterial({ color: 0xffad00 });

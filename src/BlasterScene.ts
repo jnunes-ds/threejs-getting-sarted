@@ -12,6 +12,7 @@ class BlasterScene extends Three.Scene {
   private readonly keyDown = new Set<string>();
 
   private blaster?: Three.Group;
+  private bulletMtl?: MTLLoader.MaterialCreator;
   private directionVector = new Three.Vector3();
 
   constructor(camera: Three.PerspectiveCamera) {
@@ -23,6 +24,9 @@ class BlasterScene extends Three.Scene {
   async initialize() {
     const targetMtl = await this.mtlLoader.loadAsync("assets/targetA.mtl");
     targetMtl.preload();
+
+    this.bulletMtl = await this.mtlLoader.loadAsync("assets/foamBulletB.mtl");
+    this.bulletMtl.preload();
 
     const target1 = await this.createTarget(targetMtl);
     target1.position.x = -1;
@@ -64,6 +68,10 @@ class BlasterScene extends Three.Scene {
   };
   private handleKeyUp = (event: KeyboardEvent) => {
     this.keyDown.delete(event.key.toLowerCase());
+
+    if (event.key === " ") {
+      this.createBullet();
+    }
   };
 
   private updateInput() {
@@ -124,6 +132,38 @@ class BlasterScene extends Three.Scene {
     const modelRoot = await this.objLoader.loadAsync("assets/blasterG.obj");
 
     return modelRoot;
+  }
+
+  private async createBullet() {
+    if (!this.blaster) return;
+
+    if (this.bulletMtl) {
+      this.objLoader.setMaterials(this.bulletMtl);
+    }
+
+    const bulletModel = await this.objLoader.loadAsync(
+      "assets/foamBulletB.obj"
+    );
+
+    this.camera.getWorldDirection(this.directionVector);
+
+    const aabb = new Three.Box3().setFromObject(this.blaster);
+    const size = aabb.getSize(new Three.Vector3());
+
+    const vec = this.blaster.position.clone();
+    vec.y += 0.06;
+
+    bulletModel.position.add(
+      vec.add(this.directionVector.clone().multiplyScalar(size.z * 0.5))
+    );
+
+    //rotate children to match gun
+    bulletModel.children.forEach((child) => child.rotateX(Math.PI * -0.5));
+
+    // usee the same rotation as the gun
+    bulletModel.rotation.copy(this.blaster.rotation);
+
+    this.add(bulletModel);
   }
 
   update() {

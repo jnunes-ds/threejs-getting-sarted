@@ -29,6 +29,10 @@ class BlasterScene extends Three.Scene {
 
     this.add(target1, target2, target3, target4);
 
+    const blaster = await this.createBlaster();
+    this.add(blaster);
+    blaster.position.z = -1;
+
     const light = new Three.DirectionalLight(0xffffff, 1);
     light.position.set(0, 4, 2);
 
@@ -41,6 +45,17 @@ class BlasterScene extends Three.Scene {
     const modelRoot = await this.objLoader.loadAsync("assets/targetA.obj");
 
     modelRoot.rotateY(Math.PI * 0.5);
+
+    return modelRoot;
+  }
+
+  private async createBlaster() {
+    const mtl = await this.mtlLoader.loadAsync("assets/blasterG.mtl");
+    mtl.preload();
+
+    this.objLoader.setMaterials(mtl);
+
+    const modelRoot = await this.objLoader.loadAsync("assets/blasterG.obj");
 
     return modelRoot;
   }

@@ -14,4 +14,9 @@ const mainCamera = new Three.PerspectiveCamera(60, width / height, 0.1, 100);
 const scene = new BlasterScene();
 scene.initialize();
 
-renderer.render(scene, mainCamera);
+function tick() {
+  renderer.render(scene, mainCamera);
+  requestAnimationFrame(tick);
+}
+
+tick();

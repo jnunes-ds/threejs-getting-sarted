@@ -7,7 +7,7 @@ class BlasterScene extends Three.Scene {
 
     const cube = new Three.Mesh(geometry, material);
     cube.position.z = -5;
-    cube.position.y = 1;
+    cube.position.y = -1;
 
     this.add(cube);
 

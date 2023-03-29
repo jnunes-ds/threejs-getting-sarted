@@ -1,5 +1,5 @@
 import * as Three from "three";
-import BlasterScene from "./BlasterScene";
+import BlasterScene from "./scenes/BlasterScene";
 
 const { innerWidth: width, innerHeight: height } = window;
 

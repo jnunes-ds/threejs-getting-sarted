@@ -2,23 +2,23 @@ import * as Three from "three";
 
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import Bullet from "../objects/Bullet";
 
 class BlasterScene extends Three.Scene {
   private readonly mtlLoader = new MTLLoader();
   private readonly objLoader = new OBJLoader();
 
-  private readonly camera: Three.PerspectiveCamera;
-
   private readonly keyDown = new Set<string>();
 
   private blaster?: Three.Group;
   private bulletMtl?: MTLLoader.MaterialCreator;
+
   private directionVector = new Three.Vector3();
 
-  constructor(camera: Three.PerspectiveCamera) {
-    super();
+  private bullets: Bullet[] = [];
 
-    this.camera = camera;
+  constructor(private readonly camera: Three.PerspectiveCamera) {
+    super();
   }
 
   async initialize() {
@@ -164,11 +164,34 @@ class BlasterScene extends Three.Scene {
     bulletModel.rotation.copy(this.blaster.rotation);
 
     this.add(bulletModel);
+
+    const b = new Bullet(bulletModel);
+    b.setVelocity(
+      this.directionVector.x * 0.2,
+      this.directionVector.y * 0.2,
+      this.directionVector.z * 0.2
+    );
+
+    this.bullets.push(b);
+  }
+
+  private updateBullets() {
+    for (let i = 0; i < this.bullets.length; i++) {
+      const b = this.bullets[i];
+      b.update();
+
+      if (b.shouldRemove) {
+        this.remove(b.group);
+        this.bullets.splice(i, 1);
+        i--;
+      }
+    }
   }
 
   update() {
     //update
     this.updateInput();
+    this.updateBullets();
   }
 }
 

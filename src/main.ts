@@ -2,10 +2,14 @@ import * as Three from "three";
 
 const { innerWidth: width, innerHeight: height } = window;
 
-const render = new Three.WebGL1Renderer({
+const renderer = new Three.WebGL1Renderer({
   canvas: document.getElementById("app") as HTMLCanvasElement,
 });
 
-render.setSize(width, height);
+renderer.setSize(width, height);
 
 const mainCamera = new Three.PerspectiveCamera(60, width / height, 0.1, 100);
+
+const scene = new Three.Scene();
+
+renderer.render(scene, mainCamera);

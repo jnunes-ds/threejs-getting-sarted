@@ -7,6 +7,14 @@ class BlasterScene extends Three.Scene {
   private readonly mtlLoader = new MTLLoader();
   private readonly objLoader = new OBJLoader();
 
+  private readonly camera: Three.PerspectiveCamera;
+
+  constructor(camera: Three.PerspectiveCamera) {
+    super();
+
+    this.camera = camera;
+  }
+
   async initialize() {
     const targetMtl = await this.mtlLoader.loadAsync("assets/targetA.mtl");
     targetMtl.preload();
@@ -31,7 +39,11 @@ class BlasterScene extends Three.Scene {
 
     const blaster = await this.createBlaster();
     this.add(blaster);
-    blaster.position.z = -1;
+    blaster.position.z = 3;
+    blaster.add(this.camera);
+
+    this.camera.position.z = 1;
+    this.camera.position.y = 0.5;
 
     const light = new Three.DirectionalLight(0xffffff, 1);
     light.position.set(0, 4, 2);

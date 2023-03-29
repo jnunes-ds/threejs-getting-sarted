@@ -15,6 +15,7 @@ const scene = new BlasterScene();
 scene.initialize();
 
 function tick() {
+  scene.update();
   renderer.render(scene, mainCamera);
   requestAnimationFrame(tick);
 }

@@ -7,3 +7,5 @@ const render = new Three.WebGL1Renderer({
 });
 
 render.setSize(width, height);
+
+const mainCamera = new Three.PerspectiveCamera(60, width / height, 0.1, 100);
